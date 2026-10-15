@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <base target="_top">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body><div id="siteStatusBanner" class="siteStatusBanner" hidden></div>
+  <header class="hero">
+    <div class="wrap heroShell">
+      <div class="heroText">
+        <div class="eyebrow">CHARMING JAPAN CURATION</div>
+        <h1 id="siteTitle">Charming 日本自由行</h1>
+        <p id="siteSubtitle"></p>
+        <div class="heroBadgeRow">
+          <span class="heroBadge">東京・關西・北海道・沖繩</span>
+          <span class="heroBadge">折扣碼 × 門票 × 交通 × 旅宿靈感</span>
+          <span class="heroBadge">Charming 精選整理</span>
+        </div>
+        <div class="searchPanel">
+          <input id="q" placeholder="搜尋東京、USJ、Skyliner、折扣碼、景觀台…">
+          <button onclick="searchAll()">搜尋</button>
+        </div>
+        <div id="heroNotice" class="heroNotice" hidden></div>
+      </div>
+      <aside class="heroAside">
+        <div class="themePanel">
+          <p class="themePanelTitle">WEBSITE STYLE</p>
+          <div class="theme-switch" id="themeSwitch"></div>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="section-featured_codes" data-home-section="featured_codes">
+      <div class="sectionHead">
+        <h2 id="title-featured_codes">✨ Charming Picks</h2>
+        <div class="sectionMeta"><span id="generatedAt"></span></div>
+      </div>
+      <div id="featuredCodes" class="cards compactFeatured"></div>
+    </section>
+
+    <section id="section-recommendations" data-home-section="recommendations">
+      <div class="sectionHead">
+        <h2 id="title-recommendations">🌟 Charming 推薦</h2>
+      </div>
+      <div id="recommendations" class="cards"></div>
+    </section>
+
+    <section id="section-latest_coupons" data-home-section="latest_coupons" hidden>
+      <div class="sectionHead">
+        <h2 id="title-latest_coupons">🎟 最新折扣碼</h2>
+        <button class="plain" onclick="loadCoupons()">查看全部</button>
+      </div>
+      <div id="coupons" class="cards"></div>
+    </section>
+
+    <section id="section-travel_guide" data-home-section="travel_guide">
+      <h2 id="title-travel_guide">🗾 日本自由行懶人包</h2>
+      <div id="regions" class="chips"></div>
+      <div id="products" class="cards"></div>
+      <button id="loadMoreProducts" class="loadMoreProducts" onclick="loadMoreRegionProducts()" hidden>載入更多</button>
+    </section>
+
+    <section id="section-other_offers" data-home-section="other_offers" hidden>
+      <h2 id="title-other_offers">🛍️ 其他日本優惠</h2>
+      <div id="offers" class="cards"></div>
+    </section>
+
+    <section id="section-partner_spotlight" data-home-section="partner_spotlight" hidden>
+      <h2 id="title-partner_spotlight">合作品牌精選</h2>
+      <div class="emptySection">此區塊已預建，後台開啟並指定內容後顯示。</div>
+    </section>
+
+    <section id="section-limited_time" data-home-section="limited_time" hidden>
+      <h2 id="title-limited_time">限時優惠</h2>
+      <div class="emptySection">此區塊已預建，後台開啟並指定內容後顯示。</div>
+    </section>
+
+    <section id="section-destination_spotlight" data-home-section="destination_spotlight" hidden>
+      <h2 id="title-destination_spotlight">目的地精選</h2>
+      <div class="emptySection">此區塊已預建，後台開啟並指定內容後顯示。</div>
+    </section>
+
+    <section id="section-seasonal" data-home-section="seasonal" hidden>
+      <h2 id="title-seasonal">本季推薦</h2>
+      <div class="emptySection">此區塊已預建，後台開啟並指定內容後顯示。</div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <footer class="siteFooter">
+    <span>© Charming</span>
+  </footer>
+
+  <script src="app.js"></script>
+  
+</body>
+</html>
