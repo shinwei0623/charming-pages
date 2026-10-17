@@ -631,6 +631,14 @@ body.hasAdminBar{padding-top:46px}
 /* Responsive public experience */
 html,body{max-width:100%;overflow-x:hidden}
 button,input,a{-webkit-tap-highlight-color:transparent}
+/* Never allow intrinsic content widths to push the public layout wider than the viewport. */
+.heroShell,.heroText,.heroAside,.themePanel,.searchPanel,
+main.wrap,main.wrap>section,.sectionHead,.cards,.card,
+.code,.chips,.heroBadgeRow{min-width:0;max-width:100%}
+main.wrap>section{width:100%}
+.heroText h1,.heroText p,section h2,.card h3{max-width:100%;white-space:normal;overflow-wrap:break-word}
+img,svg,video,canvas,iframe{max-width:100%;height:auto}
+
 
 @media (max-width:1024px){
   .wrap{width:min(100% - 32px,900px)}
@@ -649,18 +657,18 @@ button,input,a{-webkit-tap-highlight-color:transparent}
   .heroShell{gap:12px}
   .heroText{padding:18px 16px 16px;border-radius:22px;backdrop-filter:blur(8px)}
   .eyebrow{font-size:10px;letter-spacing:.13em;padding:7px 10px}
-  .heroText h1{font-size:clamp(34px,11vw,48px);line-height:1.05;margin:14px 0 10px}
+  .heroText h1{width:100%;font-size:clamp(30px,9.5vw,42px);line-height:1.08;margin:14px 0 10px;letter-spacing:0;word-break:normal;overflow-wrap:break-word}
   .heroText p{font-size:14px;line-height:1.65;margin-bottom:16px}
   .heroBadgeRow{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:8px;margin:0 -2px 16px;padding:0 2px 4px;scrollbar-width:none;overscroll-behavior-inline:contain;scroll-snap-type:x proximity}
   .heroBadgeRow::-webkit-scrollbar{display:none}
   .heroBadge{flex:0 0 auto;white-space:nowrap;font-size:12px;padding:8px 11px;scroll-snap-align:start}
-  .searchPanel{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:8px;border-radius:16px}
+  .searchPanel{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:8px;border-radius:16px;overflow:hidden}
   .searchPanel input{min-width:0;padding:11px 10px;font-size:16px}
   .searchPanel button{min-width:64px;min-height:44px;padding:10px 14px;border-radius:12px}
-  .themePanel{padding:14px;border-radius:20px}
+  .themePanel{width:100%;padding:14px;border-radius:20px;overflow:hidden}
   .themePanelTitle{margin-bottom:8px}
-  .theme-switch{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
-  .theme-switch button{min-height:42px;padding:9px 8px;font-size:13px}
+  .theme-switch{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;overflow:hidden}
+  .theme-switch button{width:100%;min-width:0;min-height:42px;padding:9px 6px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   main{padding:10px 0 40px}
   section{margin:12px 0;padding:18px 14px;border-radius:22px}
   section::before{left:14px;width:58px}
@@ -684,10 +692,10 @@ button,input,a{-webkit-tap-highlight-color:transparent}
 }
 
 @media (max-width:420px){
-  .wrap{width:calc(100% - 18px)}
+  .wrap{width:calc(100% - 20px);max-width:100%}
   .hero{padding-top:18px}
   .heroText{padding:16px 13px 14px;border-radius:18px}
-  .heroText h1{font-size:clamp(31px,10.5vw,40px)}
+  .heroText h1{font-size:clamp(28px,9vw,36px);line-height:1.1}
   .searchPanel{grid-template-columns:1fr}
   .searchPanel button{width:100%}
   section{padding:16px 12px;border-radius:18px}
@@ -695,6 +703,24 @@ button,input,a{-webkit-tap-highlight-color:transparent}
   .card{padding:15px 14px}
   .code{align-items:center;flex-wrap:wrap}
   .code button{margin-left:auto}
+  .theme-switch{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .theme-switch button{font-size:12px;padding-left:4px;padding-right:4px}
+  .eyebrow{max-width:100%;white-space:normal;line-height:1.35}
+
+}
+
+@media (max-width:360px){
+  .wrap{width:calc(100% - 16px)}
+  .heroText{padding:14px 11px 13px}
+  .heroText h1{font-size:28px}
+  .heroText p{font-size:13px}
+  .searchPanel{padding:7px}
+  section{padding:14px 10px}
+  section h2{font-size:22px}
+  .themePanel{padding:12px 10px}
+  .theme-switch{gap:5px}
+  .theme-switch button{font-size:11px;padding:8px 3px}
+  .card{padding:14px 12px}
 }
 
 @media (hover:none) and (pointer:coarse){
