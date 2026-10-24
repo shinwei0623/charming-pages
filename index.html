@@ -6,7 +6,8 @@
   <meta name="theme-color" content="#f4eee4">
   <link rel="stylesheet" href="styles.css?v=20261018-3">
 </head>
-<body><div id="siteStatusBanner" class="siteStatusBanner" hidden></div>
+<body>
+  <div id="dataLoadStatus" class="wrap" role="status" aria-live="polite"><p id="dataLoadMessage">正在載入最新優惠…</p><button id="retryDataLoad" type="button" onclick="loadPublicData()" hidden>重新載入</button></div><div id="siteStatusBanner" class="siteStatusBanner" hidden></div>
   <header class="hero">
     <div class="wrap heroShell">
       <div class="heroText">
@@ -96,7 +97,7 @@
     <span>© Charming</span>
   </footer>
 
-  <script src="app.js?v=20261024-expiry-1"></script>
+  <script src="app.js?v=20261024-loading-1"></script>
   
 </body>
 </html>

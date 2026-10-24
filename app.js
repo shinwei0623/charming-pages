@@ -2,16 +2,53 @@ const state={boot:null,productsAll:[],regionItems:[],currentRegion:'',visibleCou
 
 const DATA_ENDPOINT='https://script.google.com/macros/s/AKfycbxZOMUohIdXn8ZQxFu8wG6HiYhiEnHFfTyX9FoDryM0ost9-G6f3E-KXNeeeFVmuMKx/exec';
 
-if (typeof window !== 'undefined') window.addEventListener('load',()=>{
-  const callback='__charmingData_'+Date.now();
-  const script=document.createElement('script');
-  const timer=setTimeout(()=>{ cleanup(); fail(new Error('資料載入逾時')); },12000);
-  function cleanup(){ clearTimeout(timer); try{ delete window[callback]; }catch(_){ window[callback]=undefined; } script.remove(); }
-  window[callback]=(data)=>{ cleanup(); init(data); };
-  script.onerror=()=>{ cleanup(); fail(new Error('資料載入失敗')); };
-  script.src=DATA_ENDPOINT+'?action=public-data&callback='+encodeURIComponent(callback)+'&v='+Date.now();
-  document.head.appendChild(script);
-});
+let dataLoadGeneration=0;
+if (typeof window !== 'undefined') window.addEventListener('load',loadPublicData);
+function setDataLoadStatus(message,retry=false){
+  const box=document.getElementById('dataLoadStatus');
+  if(!box)return;
+  box.hidden=!message;
+  document.getElementById('dataLoadMessage').textContent=message;
+  document.getElementById('retryDataLoad').hidden=!retry;
+}
+function loadPublicData(){
+  const generation=++dataLoadGeneration;
+  let attempt=0;
+  function request(){
+    if(generation!==dataLoadGeneration)return;
+    attempt++;
+    setDataLoadStatus(attempt===1?'正在載入最新優惠…':'連線較慢，正在重新載入優惠…');
+    const callback='__charmingData_'+generation+'_'+attempt+'_'+Date.now();
+    const script=document.createElement('script');
+    let settled=false;
+    const timer=setTimeout(()=>finish(new Error('資料載入逾時')),30000);
+    function finish(error,data){
+      if(settled)return;
+      settled=true;clearTimeout(timer);script.remove();
+      // A timed-out response may still execute; leave a harmless callback briefly.
+      window[callback]=()=>{};
+      setTimeout(()=>{delete window[callback]},60000);
+      if(generation!==dataLoadGeneration)return;
+      if(!error){
+        try{
+          if(!data||typeof data.site!=='object'||!data.site||!Array.isArray(data.products)||!Array.isArray(data.coupons))
+            throw new Error('公開資料格式不完整');
+          init(data);setDataLoadStatus('');return;
+        }catch(e){error=e}
+      }
+      console.error(error);
+      if(attempt<2)setTimeout(request,1000);
+      else setDataLoadStatus('優惠資料暫時讀取失敗，請按「重新載入」再試一次。',true);
+    }
+    window[callback]=data=>finish(null,data);
+    script.onerror=()=>finish(new Error('資料載入失敗'));
+    script.src=DATA_ENDPOINT+'?action=public-data&callback='+encodeURIComponent(callback)+'&v='+Date.now();
+    document.head.appendChild(script);
+  }
+  request();
+}
+function readTheme(){try{return localStorage.getItem('charmingTheme')}catch(_){return null}}
+function saveTheme(id){try{localStorage.setItem('charmingTheme',id)}catch(_){}}
 if(typeof window!=='undefined'){
   setInterval(refreshOfferDay,60000);
   window.addEventListener('focus',refreshOfferDay);
@@ -91,8 +128,8 @@ function applyHomeSections(sections){
   const map=Object.fromEntries((sections||[]).map(x=>[x.id,x]));
   document.querySelectorAll('[data-home-section]').forEach(sec=>{const cfg=map[sec.dataset.homeSection];if(!cfg)return;sec.hidden=!cfg.visible;const title=document.getElementById('title-'+sec.dataset.homeSection);if(title&&cfg.title){const icon=(title.textContent.match(/^[^\p{L}\p{N}]+/u)||[''])[0];title.textContent=icon+cfg.title}sec.style.order=String(cfg.sortOrder||9999)});
 }
-function buildThemes(themes,def,allow){const saved=localStorage.getItem('charmingTheme'),picked=(saved&&themes[saved])?saved:def;applyTheme(picked);if(!allow){themeSwitch.style.display='none';return}const labels={heritage:'旅宿',storybook:'手繪',seasons:'四季'};themeSwitch.innerHTML=Object.keys(themes).map(id=>`<button data-theme="${esc(id)}" onclick="applyTheme('${jsq(id)}')">${labels[id]||esc(themes[id].NAME||id)}</button>`).join('');markTheme()}
-function applyTheme(id){document.body.dataset.theme=id;localStorage.setItem('charmingTheme',id);markTheme()}
+function buildThemes(themes,def,allow){const saved=readTheme(),picked=(saved&&themes[saved])?saved:def;applyTheme(picked);if(!allow){themeSwitch.style.display='none';return}const labels={heritage:'旅宿',storybook:'手繪',seasons:'四季'};themeSwitch.innerHTML=Object.keys(themes).map(id=>`<button data-theme="${esc(id)}" onclick="applyTheme('${jsq(id)}')">${labels[id]||esc(themes[id].NAME||id)}</button>`).join('');markTheme()}
+function applyTheme(id){document.body.dataset.theme=id;saveTheme(id);markTheme()}
 function markTheme(){document.querySelectorAll('[data-theme]').forEach(x=>x.classList.toggle('active',x.dataset.theme===document.body.dataset.theme))}
 
 function loadRegion(r){
